@@ -29,7 +29,7 @@ use yii\console\Controller;
  * ./craft hawksearch
  *
  * @author    One Design Company
- * @package   LoyolaPress
+ * @package   Hawksearch
  * @since     1.0.0
  */
 class IndexController extends Controller
