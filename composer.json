@@ -1,5 +1,5 @@
 {
-  "name": "onedesign/hawksearch",
+  "name": "onedesign/craft-hawksearch",
   "description": "Exports site content as a data feed tailored for Hawksearch integration.",
   "version": "1.0.0",
   "type": "craft-plugin",
@@ -8,7 +8,8 @@
     "cms",
     "craftcms",
     "craft-plugin",
-    "loyolapress"
+    "loyolapress",
+    "hawksearch"
   ],
   "license": "MIT",
   "authors": [
@@ -18,10 +19,15 @@
     }
   ],
   "support": {
+    "issues": "https://github.com/onedesign/craft-hawksearch",
+    "docs": "https://github.com/onedesign/craft-hawksearch/blob/master/README.md",
     "email": "dev@onedesigncompany.com"
   },
   "require": {
     "craftcms/cms": "^3.1.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master"
   },
   "autoload": {
     "psr-4": {
