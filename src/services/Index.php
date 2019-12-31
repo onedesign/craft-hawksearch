@@ -17,6 +17,7 @@ class Index extends Component
     private static $ATTRIBUTES_FILE_NAME = 'attributes.txt';
     private static $CONTENT_FILE_NAME = 'content.txt';
     private static $ID_PREFIX = 'craft_';
+    private static $HIERARCHY_FILE_NAME = 'hierarchy.txt';
 
     private static $EXCLUDED_SECTIONS = [
         'homePage',
@@ -70,7 +71,7 @@ class Index extends Component
             'sort_order'
         ];
 
-        $this->setColumnHeadings($columns, 'hierarchy.txt');
+        $this->setColumnHeadings($columns, self::$HIERARCHY_FILE_NAME);
 
 
         foreach ($groups as $group) {
@@ -90,7 +91,7 @@ class Index extends Component
             }
         }
 
-        $this->appendLinesToFile($lines, 'hierarchy.txt');
+        $this->appendLinesToFile($lines, self::$HIERARCHY_FILE_NAME);
     }
 
     private function generateContentAttributes($entries, $fileName)
