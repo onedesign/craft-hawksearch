@@ -1,0 +1,16 @@
+{% import '_includes/forms' as forms %}
+
+{% extends '_layouts/cp' %}
+
+{% set title = 'Hawksearch' %}
+
+{% block content %}
+  <form method="post">
+    {{ csrfInput() }}
+    {{ forms.hidden({
+      name: 'action',
+      value: 'hawksearch/index/generate'
+    }) }}
+    <input class="btn submit" type="submit" value="Generate Index">
+  </form>
+{% endblock content %}
