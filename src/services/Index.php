@@ -240,7 +240,7 @@ class Index extends Component
     {
         $storagePath = \Craft::$app->path->getStoragePath();
         $folder = $storagePath . self::$TARGET_FOLDER;
-        $exportFile = fopen($folder . $fileName, 'a');
+        $exportFile = fopen($folder . $fileName, 'ab');
         foreach ($lines as $line) {
             fputcsv($exportFile, $line);
         }
