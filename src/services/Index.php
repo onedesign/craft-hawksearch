@@ -6,8 +6,10 @@
 namespace onedesign\hawksearch\services;
 
 use craft\base\Component;
+use craft\elements\Category;
 use craft\elements\Entry;
 use craft\elements\GlobalSet;
+use craft\records\CategoryGroup;
 
 class Index extends Component
 {
@@ -52,8 +54,43 @@ class Index extends Component
 
         $this->generateContentIndex($entries, self::$CONTENT_FILE_NAME);
         $this->generateContentAttributes($entries, self::$ATTRIBUTES_FILE_NAME);
+        $this->generateHierarchyFile();
         $this->generateTimestampFile();
+    }
 
+    private function generateHierarchyFile()
+    {
+        $groups = CategoryGroup::find()->all();
+        $lines = [];
+
+        $columns = [
+            'hierarchy_id',
+            'hierarchy_name',
+            'parent_hierarchy_id',
+            'sort_order'
+        ];
+
+        $this->setColumnHeadings($columns, 'hierarchy.txt');
+
+
+        foreach ($groups as $group) {
+            $categories = Category::find()
+                ->group($group->handle)
+                ->all();
+
+            foreach ($categories as $idx => $category) {
+                $parent_id = $category->parent ? $category->parent->id : '';
+
+                $lines[] = [
+                    $category->id,
+                    $category->title,
+                    $parent_id,
+                    $idx
+                ];
+            }
+        }
+
+        $this->appendLinesToFile($lines, 'hierarchy.txt');
     }
 
     private function generateContentAttributes($entries, $fileName)
