@@ -11,12 +11,12 @@ use craft\elements\GlobalSet;
 
 class Index extends Component
 {
-    const TARGET_FOLDER = '/search-indices/';
-    const ATTRIBUTES_FILE_NAME = 'attributes.txt';
-    const CONTENT_FILE_NAME = 'content.txt';
-    const ID_PREFIX = 'craft_';
+    private static $TARGET_FOLDER = '/search-indices/';
+    private static $ATTRIBUTES_FILE_NAME = 'attributes.txt';
+    private static $CONTENT_FILE_NAME = 'content.txt';
+    private static $ID_PREFIX = 'craft_';
 
-    const EXCLUDED_SECTIONS = [
+    private static $EXCLUDED_SECTIONS = [
         'homePage',
         'mainNavigation',
         'programFamily',
@@ -27,7 +27,7 @@ class Index extends Component
     public function generateIndex()
     {
         $entries = Entry::find()
-            ->section(array_merge(['not'], self::EXCLUDED_SECTIONS))
+            ->section(array_merge(['not'], self::$EXCLUDED_SECTIONS))
             ->excludeFromHawksearchIndex('not 1')
             ->siteId('*')
             ->with([
@@ -50,8 +50,8 @@ class Index extends Component
             ])
             ->all();
 
-        $this->generateContentIndex($entries, self::CONTENT_FILE_NAME);
-        $this->generateContentAttributes($entries, self::ATTRIBUTES_FILE_NAME);
+        $this->generateContentIndex($entries, self::$CONTENT_FILE_NAME);
+        $this->generateContentAttributes($entries, self::$ATTRIBUTES_FILE_NAME);
         $this->generateTimestampFile();
 
     }
@@ -145,7 +145,7 @@ class Index extends Component
     {
         switch ($columnKey) {
             case 'unique_id':
-                return self::ID_PREFIX . $entry->siteId . '_' . $entry->id;
+                return self::$ID_PREFIX . $entry->siteId . '_' . $entry->id;
             case 'name':
                 return $entry->title;
             case 'url_detail':
@@ -169,7 +169,7 @@ class Index extends Component
             $lines[] = $entryData;
         }
 
-        $this->appendLinesToFile($lines, self::CONTENT_FILE_NAME);
+        $this->appendLinesToFile($lines, self::$CONTENT_FILE_NAME);
     }
 
     private function generateAttributesFromCategory($entries, $categoryHandle)
@@ -183,20 +183,20 @@ class Index extends Component
                 $categories = $entry{$categoryHandle};
 
                 foreach ($categories as $category) {
-                    $uniqueId = self::ID_PREFIX . $entry->siteId . '_' . $entry->id;
+                    $uniqueId = self::$ID_PREFIX . $entry->siteId . '_' . $entry->id;
                     $categoryRow = [$uniqueId, $categoryFieldLabel->name, $category->title];
                     $lines[] = $categoryRow;
                 }
             }
         }
 
-        $this->appendLinesToFile($lines, self::ATTRIBUTES_FILE_NAME);
+        $this->appendLinesToFile($lines, self::$ATTRIBUTES_FILE_NAME);
     }
 
     private function appendLinesToFile($lines, $fileName)
     {
         $storagePath = \Craft::$app->path->getStoragePath();
-        $folder = $storagePath . self::TARGET_FOLDER;
+        $folder = $storagePath . self::$TARGET_FOLDER;
         $exportFile = fopen($folder . $fileName, 'a');
         foreach ($lines as $line) {
             fputcsv($exportFile, $line);
@@ -208,7 +208,7 @@ class Index extends Component
     private function setColumnHeadings(array $fields, string $fileName)
     {
         $storagePath = \Craft::$app->path->getStoragePath();
-        $folder = $storagePath . self::TARGET_FOLDER;
+        $folder = $storagePath . self::$TARGET_FOLDER;
         if (!file_exists($folder) && !mkdir($folder, 0744, true) && !is_dir($folder)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $folder));
         }
@@ -226,16 +226,16 @@ class Index extends Component
         $timeStamp = new \DateTime('now');
         $isoStamp = $timeStamp->format(\DateTime::ATOM);
         $storagePath = \Craft::$app->path->getStoragePath();
-        $folder = $storagePath . self::TARGET_FOLDER;
+        $folder = $storagePath . self::$TARGET_FOLDER;
         $file = $folder . 'timestamp.txt';
-        $entriesIndex = $folder . self::CONTENT_FILE_NAME;
-        $attributesIndex = $folder . self::ATTRIBUTES_FILE_NAME;
+        $entriesIndex = $folder . self::$CONTENT_FILE_NAME;
+        $attributesIndex = $folder . self::$ATTRIBUTES_FILE_NAME;
         $attributesCount = count(file($attributesIndex));
         $entriesCount = count(file($entriesIndex));
         $fileContent = $isoStamp . "\n";
         $fileContent .= "dataset\tfull\n";
-        $fileContent .= self::ATTRIBUTES_FILE_NAME . "\t" . $attributesCount . "\n";
-        $fileContent .= self::CONTENT_FILE_NAME . "\t" . $entriesCount . "\n";
+        $fileContent .= self::$ATTRIBUTES_FILE_NAME . "\t" . $attributesCount . "\n";
+        $fileContent .= self::$CONTENT_FILE_NAME . "\t" . $entriesCount . "\n";
 
         file_put_contents($file, $fileContent);
     }
