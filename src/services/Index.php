@@ -61,14 +61,20 @@ class Index extends Component
         $attributeCols = ['unique_id', 'key', 'value'];
 
         $this->setColumnHeadings($attributeCols, $fileName);
-        $this->generateAttributesFromCategory($entries, 'scriptureCategory');
-        $this->generateAttributesFromCategory($entries, 'audience');
-        $this->generateAttributesFromCategory($entries, 'category');
-        $this->generateAttributesFromCategory($entries, 'searchFacet');
-        $this->generateAttributesFromCategory($entries, 'activityGrade');
-        $this->generateAttributesFromCategory($entries, 'activityGroup');
-        $this->generateAttributesFromCategory($entries, 'activitySubject');
-        $this->generateAttributesFromCategory($entries, 'activityKeywords');
+
+        $categoryHandles = [
+            'scriptureCategory',
+            'audience',
+            'category',
+            'searchFacet',
+            'activityGrade',
+            'activitySubject',
+            'activityKeywords'
+        ];
+
+        foreach ($categoryHandles as $handle) {
+            $this->generateAttributesFromCategory($entries, $handle);
+        }
     }
 
     private function generateContentIndex($entries, $fileName)
