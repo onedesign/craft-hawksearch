@@ -27,6 +27,16 @@ class Index extends Component
         'addendum'
     ];
 
+    private static $EXCLUDED_TEMPLATES = [
+        'activityFinder',
+        'addendum',
+        'featured3mr',
+        'featuredSaints',
+        'featuredSundayConnection',
+        'landingPageNest',
+        'placeholder'
+    ];
+
     public function generateIndex()
     {
         $entries = Entry::find()
@@ -51,6 +61,7 @@ class Index extends Component
                 'tileImage',
                 'topics',
             ])
+            ->template(array_merge(['not', self::$EXCLUDED_TEMPLATES]))
             ->all();
 
         $this->generateContentIndex($entries, self::$CONTENT_FILE_NAME);
