@@ -1,7 +1,7 @@
 {
   "name": "onedesign/craft-hawksearch",
   "description": "Exports site content as a data feed tailored for Hawksearch integration.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "craft-plugin",
   "keywords": [
     "craft",
