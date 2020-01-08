@@ -50,7 +50,7 @@ class IndexController extends Controller
             Hawksearch::getInstance()->index->generateIndex();
             $this->stdout('Index succesfully generated.' . PHP_EOL);
         } catch (\Exception $e) {
-            var_dump($e);
+            var_dump($e->getMessage());
             $this->stderr('Failed to generate index.' . PHP_EOL);
         }
     }
