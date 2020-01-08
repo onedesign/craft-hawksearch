@@ -49,6 +49,7 @@ class Index extends Component
                 'activitySubject',
                 'activityKeywords',
                 'audience',
+                'authors',
                 'image',
                 'category',
                 'liturgicalYear',
@@ -124,6 +125,27 @@ class Index extends Component
         foreach ($categoryHandles as $handle) {
             $this->generateAttributesFromCategory($entries, $handle);
         }
+
+        $this->generateAuthorAttributes($entries);
+    }
+
+    private function generateAuthorAttributes(array $entries)
+    {
+        $lines = [];
+
+        foreach ($entries as $entry) {
+            assert($entry instanceof Entry);
+
+            foreach ($entry->authors as $author) {
+                $lines[] = [
+                    self::$ID_PREFIX . $entry->siteId . '_' . $entry->id,
+                    'Author',
+                    trim($author->title)
+                ];
+            }
+        }
+
+        $this->appendLinesToFile($lines, self::$ATTRIBUTES_FILE_NAME);
     }
 
     private function generateContentIndex($entries, $fileName)
