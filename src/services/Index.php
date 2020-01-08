@@ -13,8 +13,7 @@ use craft\records\CategoryGroup;
 
 class Index extends Component
 {
-    private static $STORAGE_FOLDER = CRAFT_BASE_PATH . '/web';
-    private static $TARGET_FOLDER = '/search-indices/';
+    private static $OUTPUT_PATH = CRAFT_BASE_PATH . '/web/search-indices/';
     private static $ATTRIBUTES_FILE_NAME = 'attributes.txt';
     private static $CONTENT_FILE_NAME = 'content.txt';
     private static $ID_PREFIX = 'craft_';
@@ -251,8 +250,7 @@ class Index extends Component
 
     private function appendLinesToFile($lines, $fileName)
     {
-        $storagePath = self::$STORAGE_FOLDER;
-        $folder = $storagePath . self::$TARGET_FOLDER;
+        $folder = self::$OUTPUT_PATH;
         $exportFile = fopen($folder . $fileName, 'ab');
         foreach ($lines as $line) {
             fputcsv($exportFile, $line);
@@ -263,8 +261,7 @@ class Index extends Component
 
     private function setColumnHeadings(array $fields, string $fileName)
     {
-        $storagePath = self::$STORAGE_FOLDER;
-        $folder = $storagePath . self::$TARGET_FOLDER;
+        $folder = self::$OUTPUT_PATH;
         if (!file_exists($folder) && !mkdir($folder, 0744, true) && !is_dir($folder)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $folder));
         }
@@ -281,8 +278,7 @@ class Index extends Component
     {
         $timeStamp = new \DateTime('now');
         $isoStamp = $timeStamp->format(\DateTime::ATOM);
-        $storagePath = self::$STORAGE_FOLDER;
-        $folder = $storagePath . self::$TARGET_FOLDER;
+        $folder = self::$OUTPUT_PATH;
         $file = $folder . 'timestamp.txt';
         $entriesIndex = $folder . self::$CONTENT_FILE_NAME;
         $attributesIndex = $folder . self::$ATTRIBUTES_FILE_NAME;
