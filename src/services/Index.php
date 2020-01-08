@@ -262,7 +262,7 @@ class Index extends Component
     private function setColumnHeadings(array $fields, string $fileName)
     {
         $folder = self::$OUTPUT_PATH;
-        if (!file_exists($folder) && !mkdir($folder, 0744, true) && !is_dir($folder)) {
+        if (!file_exists($folder) && !mkdir($folder, 0774, true) && !is_dir($folder)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $folder));
         }
 
